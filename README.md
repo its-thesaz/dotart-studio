@@ -3,7 +3,7 @@
 <div align="center">
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/its-thesaz/dotart-studio?style=for-the-badge&color=purple)
-![GitHub license]([https://github.com/its-thesaz/dotart-studio/blob/main/LICENSE](https://img.shields.io/github/repo-size/its-thesaz/)?style=for-the-badge&color=pink)
+![GitHub license](https://img.shields.io/github/repo-size/its-thesaz/?style=for-the-badge&color=pink)
 ![GitHub stars](https://img.shields.io/github/stars/its-thesaz/dotart-studio?style=for-the-badge&color=gold)
 ![GitHub forks](https://img.shields.io/github/forks/its-thesaz/dotart-studio?style=for-the-badge&color=cyan)
 
