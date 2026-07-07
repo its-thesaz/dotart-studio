@@ -1,0 +1,11 @@
+# OS Junk Files
+.DS_Store
+Thumbs.db
+
+# IDE Configs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln

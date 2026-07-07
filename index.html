@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>DotArt Studio 🏴‍☠️ | Ultimate Edition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazirmatn', system-ui, sans-serif; }
+
+        :root {
+            --bg-body: #02010c;
+            --bg-app: rgba(16, 10, 30, 0.78);
+            --border-app: rgba(255, 255, 255, 0.09);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --control-bg: rgba(255, 255, 255, 0.02);
+            --sub-panel-bg: rgba(0, 0, 0, 0.5);
+            --output-bg: #010103;
+            --accent: 135deg, #a855f7, #ec4899, #f59e0b;
+            --accent-glow: rgba(168, 85, 247, 0.5);
+            --ai-accent: 135deg, #10b981, #059669;
+            --gold: #fbbf24;
+            --gold-glow: rgba(251, 191, 36, 0.4);
+            --output-font-size: 10px;
+            --radius-lg: 28px;
+            --radius-md: 18px;
+            --liquid-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%);
+            --liquid-glass-hover: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.03) 100%);
+            --liquid-border: rgba(255, 255, 255, 0.12);
+            --elastic-curve: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        body.light-mode {
+            --bg-body: #f1f5f9;
+            --bg-app: rgba(255, 255, 255, 0.9);
+            --border-app: rgba(15, 23, 42, 0.08);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --control-bg: rgba(15, 23, 42, 0.02);
+            --sub-panel-bg: rgba(15, 23, 42, 0.04);
+            --output-bg: #ffffff;
+            --accent: 135deg, #7c3aed, #db2777, #d97706;
+            --accent-glow: rgba(124, 58, 237, 0.3);
+            --liquid-glass: linear-gradient(135deg, rgba(15, 23, 42, 0.03) 0%, rgba(15, 23, 42, 0.01) 100%);
+            --liquid-glass-hover: linear-gradient(135deg, rgba(15, 23, 42, 0.08) 0%, rgba(15, 23, 42, 0.02) 100%);
+            --liquid-border: rgba(15, 23, 42, 0.1);
+        }
+
+        body { background-color: var(--bg-body); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; overflow-x: hidden; color: var(--text-primary); transition: background-color 0.6s var(--elastic-curve); width: 100vw; position: relative; }
+        #bgCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0.6; mix-blend-mode: screen; transition: opacity 0.5s; }
+
+        .master-container { width: 100%; max-width: 1680px; background: var(--bg-app); backdrop-filter: blur(50px); -webkit-backdrop-filter: blur(50px); border: 1px solid var(--border-app); border-radius: var(--radius-lg); padding: 32px; box-shadow: 0 40px 80px -20px rgba(0,0,0,0.8), 0 0 100px -20px var(--accent-glow); position: relative; z-index: 1; transition: all 0.6s var(--elastic-curve); animation: studioIntro 1s var(--elastic-curve) forwards; transform: translateY(40px) scale(0.98); opacity: 0; }
+        
+        @keyframes studioIntro { to { transform: translateY(0) scale(1); opacity: 1; } }
+
+        /* Header Frame */
+        .studio-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-app); padding-bottom: 24px; margin-bottom: 28px; gap: 16px; width: 100%; flex-wrap: wrap; }
+        .brand { display: flex; align-items: center; gap: 14px; flex-shrink: 0; position: relative; }
+        .brand i { font-size: 2.5rem; background: linear-gradient(var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 15px var(--accent-glow)); animation: floatCrown 3s ease-in-out infinite; }
+        @keyframes floatCrown { 0%, 100% { transform: translateY(0) rotate(0deg) scale(1); } 50% { transform: translateY(-8px) rotate(5deg) scale(1.05); } }
+        .brand-text { display: flex; flex-direction: column; }
+        .brand h1 { font-size: 1.7rem; font-weight: 900; letter-spacing: -0.5px; line-height: 1.1; text-shadow: 0 0 20px rgba(255,255,255,0.05); }
+        .brand .version-tag { font-size: 0.8rem; font-weight: 800; margin-top: 3px; background: linear-gradient(90deg, #fbbf24, #ec4899, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
+
+        .nav-tools { display: flex; gap: 12px; align-items: center; flex-shrink: 0; }
+        .tool-btn { background: var(--liquid-glass); border: 1px solid var(--liquid-border); color: var(--text-primary); padding: 12px 20px; border-radius: 16px; cursor: pointer; transition: all 0.4s var(--elastic-curve); display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.15); position: relative; overflow: hidden; }
+        .tool-btn:hover { background: var(--liquid-glass-hover); transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.35); border-color: rgba(255,255,255,0.35); }
+        .tool-btn:active { transform: translateY(-1px) scale(0.95); }
+        
+        .tool-btn.active-live { background: rgba(239, 68, 68, 0.2) !important; border-color: #ef4444 !important; color: #fca5a5; animation: livePulse 1.5s infinite; box-shadow: 0 0 30px rgba(239, 68, 68, 0.5); }
+        @keyframes livePulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 18px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+
+        /* Grid Configuration */
+        .workspace { display: grid; grid-template-columns: 1fr; gap: 28px; width: 100%; }
+        .controls-column { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+        .preview-column { display: flex; flex-direction: column; gap: 16px; min-width: 0; position: relative; }
+
+        .studio-card { background: var(--control-bg); border: 1px solid var(--border-app); border-radius: var(--radius-lg); padding: 24px; transition: all 0.4s var(--elastic-curve); box-shadow: 0 10px 35px -10px rgba(0,0,0,0.25); width: 100%; position: relative; overflow: hidden; flex-shrink: 0; /* جلوگیری از فشرده‌سازی لایه‌ها */ }
+        .studio-card:hover { border-color: rgba(168, 85, 247, 0.3); box-shadow: 0 25px 50px -10px rgba(0,0,0,0.45); transform: translateY(-3px); }
+        
+        .studio-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.02), transparent); transition: all 0.6s ease; pointer-events: none; }
+        .studio-card:hover::before { left: 150%; }
+
+        .card-main-title { font-size: 1.15rem; font-weight: 900; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; color: var(--text-primary); }
+        
+        .sub-panel { background: var(--sub-panel-bg); border: 1px solid rgba(255,255,255,0.05); border-radius: var(--radius-md); padding: 20px; margin-bottom: 18px; position: relative; overflow: hidden; transition: border-color 0.3s; }
+        .sub-panel:hover { border-color: rgba(255,255,255,0.14); }
+        .sub-panel:last-child { margin-bottom: 0; }
+        .sub-panel-title { font-size: 0.85rem; font-weight: 800; color: var(--text-secondary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; letter-spacing: 1px; }
+
+        /* Upload Container File Drop */
+        .drop-deck { border: 2px dashed rgba(168, 85, 247, 0.4); border-radius: 16px; padding: 30px 10px; text-align: center; cursor: pointer; transition: all 0.4s var(--elastic-curve); background: linear-gradient(180deg, rgba(168, 85, 247, 0.05) 0%, transparent 100%); position: relative; }
+        .drop-deck:hover { border-color: var(--gold); background: rgba(251, 191, 36, 0.08); transform: scale(1.02); box-shadow: 0 12px 30px rgba(251, 191, 36, 0.15); }
+        .drop-deck i { font-size: 2.8rem; background: linear-gradient(var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; filter: drop-shadow(0 0 10px var(--accent-glow)); transition: transform 0.4s var(--elastic-curve); }
+        .drop-deck:hover i { transform: translateY(-6px) scale(1.05); }
+
+        /* Media Dock Preview Frame */
+        .img-mini-dock { display: none; margin-top: 14px; border-radius: 14px; overflow: hidden; border: 1px solid var(--border-app); background: #000; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.6); transform: scale(0.92); opacity: 0; transition: all 0.4s var(--elastic-curve); }
+        .img-mini-dock.active { display: block; transform: scale(1); opacity: 1; }
+        .img-mini-dock img { max-width: 100%; max-height: 160px; object-fit: contain; display: block; margin: 0 auto; transition: transform 0.5s var(--elastic-curve); }
+        .img-mini-dock:hover img { transform: scale(1.06); }
+        
+        .scanner-line { position: absolute; top: 0; left: 0; width: 100%; height: 6px; background: linear-gradient(90deg, transparent, var(--gold), transparent); box-shadow: 0 0 25px 8px var(--gold-glow); display: none; z-index: 10; opacity: 0; }
+        .scanner-active { display: block; opacity: 1; animation: scanMatrix 1.4s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+        @keyframes scanMatrix { 0% { top: 0%; } 50% { top: 100%; } 100% { top: 0%; } }
+
+        .live-badge { position: absolute; top: 12px; right: 12px; background: #ef4444; color: white; font-size: 0.7rem; padding: 4px 12px; border-radius: 20px; font-weight: bold; animation: pulseRed 0.8s infinite alternate; z-index: 5; box-shadow: 0 0 15px rgba(239, 68, 68, 0.6); }
+        @keyframes pulseRed { from { opacity: 0.6; transform: scale(0.93); } to { opacity: 1; transform: scale(1.07); } }
+
+        /* Layout Dimension Matrices */
+        .matrix-inputs { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+        .matrix-inputs > div { flex: 1; min-width: 80px; }
+        .matrix-inputs input { width: 100%; padding: 13px; border-radius: 14px; border: 1px solid var(--border-app); background: rgba(0,0,0,0.35); color: inherit; text-align: center; font-size: 0.95rem; font-weight: 800; outline: none; transition: all 0.3s var(--elastic-curve); box-shadow: inset 0 2px 5px rgba(0,0,0,0.4); }
+        .matrix-inputs input:focus { border-color: #a855f7; box-shadow: 0 0 25px rgba(168, 85, 247, 0.3), inset 0 2px 5px rgba(0,0,0,0.4); transform: translateY(-2px); }
+        
+        .aspect-lock { background: var(--control-bg); border: 1px solid var(--border-app); color: var(--text-primary); padding: 12px; border-radius: 14px; cursor: pointer; width: 48px; height: 46px; transition: all 0.3s var(--elastic-curve); display: flex; align-items: center; justify-content: center; }
+        .aspect-lock:hover { transform: scale(1.1) rotate(15deg); border-color: rgba(255,255,255,0.35); }
+        .aspect-lock:active { transform: scale(0.92); }
+        .aspect-lock.active { color: #fff; background: linear-gradient(135deg, #9333ea, #db2777); border: none; box-shadow: 0 6px 20px rgba(219, 39, 119, 0.45); }
+        .aspect-lock i { transition: transform 0.5s var(--elastic-curve); }
+        .aspect-lock.active i { transform: rotate(180deg); }
+
+        .preset-deck { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; width: 100%; }
+        .preset-btn { flex: 1 1 calc(25% - 8px); background: rgba(255,255,255,0.04); border: 1px solid var(--border-app); color: var(--text-secondary); padding: 10px 6px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.3s var(--elastic-curve); min-width: 65px; text-align: center; }
+        .preset-btn:hover { background: rgba(168, 85, 247, 0.18); color: #fff; border-color: #a855f7; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(168,85,247,0.15); }
+        .preset-btn:active { transform: scale(0.93); }
+
+        /* Sliders Core Layout */
+        .grid-sliders { display: flex; flex-direction: column; gap: 16px; }
+        .slider-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .slider-item label { font-size: 0.85rem; min-width: 110px; display: flex; align-items: center; gap: 8px; font-weight: 700; color: #e2e8f0; }
+        body.light-mode .slider-item label { color: #1e293b; }
+        .slider-item input[type="range"] { flex: 1; -webkit-appearance: none; height: 8px; border-radius: 8px; background: rgba(255,255,255,0.1); outline: none; cursor: pointer; transition: background 0.3s; }
+        .slider-item input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: linear-gradient(135deg, #ec4899, #a855f7); cursor: pointer; border: 2px solid #fff; transition: transform 0.2s var(--elastic-curve), background 0.3s; box-shadow: 0 0 15px rgba(219, 39, 119, 0.6); }
+        .slider-item input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.35); background: linear-gradient(135deg, #f59e0b, #ec4899); box-shadow: 0 0 20px rgba(245, 158, 11, 0.8); }
+        .slider-counter { font-size: 0.85rem; font-weight: 800; min-width: 44px; text-align: center; color: #c084fc; background: rgba(0,0,0,0.35); padding: 4px 6px; border-radius: 8px; transition: transform 0.2s var(--elastic-curve); }
+        .slider-item input[type="range"]:active ~ .slider-counter { transform: scale(1.2); color: var(--gold); }
+
+        /* Toggles Framework */
+        .toggles-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(95px, 1fr)); gap: 10px; font-size: 0.8rem; }
+        .toggles-container label { display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: rgba(0,0,0,0.3); padding: 12px 8px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.05); user-select: none; transition: all 0.3s var(--elastic-curve); font-weight: 700; text-align: center; }
+        .toggles-container label:hover { background: rgba(255,255,255,0.08); border-color: #a855f7; box-shadow: 0 6px 18px rgba(168, 85, 247, 0.2); transform: translateY(-3px); }
+        .toggles-container label:active { transform: scale(0.95); }
+        .toggles-container input[type="checkbox"] { accent-color: #ec4899; width: 16px; height: 16px; cursor: pointer; transition: transform 0.2s; }
+        .toggles-container label:hover input[type="checkbox"] { transform: scale(1.15); }
+        
+        /* AI Orchestrator Main Ignition */
+        .ai-btn { grid-column: 1 / -1; background: linear-gradient(var(--ai-accent)); color: white; border: none; padding: 15px; border-radius: 14px; font-weight: 900; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 6px 22px rgba(16, 185, 129, 0.4); transition: all 0.4s var(--elastic-curve); width: 100%; position: relative; overflow: hidden; }
+        .ai-btn:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 14px 28px rgba(16, 185, 129, 0.6); }
+        .ai-btn:active { transform: translateY(-1px) scale(0.96); }
+
+        /* Palette Cluster Framework */
+        .style-hub { display: flex; flex-wrap: wrap; gap: 10px; }
+        .hub-btn { background: rgba(0,0,0,0.25); border: 1px solid var(--border-app); border-radius: 14px; padding: 13px; color: var(--text-primary); font-size: 0.8rem; font-weight: 700; cursor: pointer; text-align: center; transition: all 0.4s var(--elastic-curve); flex: 1 1 calc(33.33% - 10px); min-width: 80px; }
+        .hub-btn:hover { border-color: #a855f7; background: rgba(168, 85, 247, 0.12); transform: translateY(-3px); }
+        .hub-btn.active { background: linear-gradient(var(--accent)); color: #fff; border: none; box-shadow: 0 8px 25px var(--accent-glow); font-weight: 900; transform: scale(1.05); }
+        .hub-btn:active { transform: scale(0.94); }
+
+        #customCharsInput { width: 100%; margin-top: 14px; padding: 14px; border-radius: 14px; background: rgba(0,0,0,0.45); border: 1px solid #ec4899; color: #fff; text-align: center; font-size: 0.95rem; font-weight: bold; letter-spacing: 2px; display: none; outline: none; box-shadow: inset 0 0 15px rgba(219, 39, 119, 0.25); animation: panelSlideIn 0.4s var(--elastic-curve); box-sizing: border-box; }
+        @keyframes panelSlideIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Main Processing Fire Ignition Button */
+        .action-deck { margin-top: 10px; width: 100%; }
+        .btn-fire { width: 100%; background: linear-gradient(var(--accent)); background-size: 200% auto; border: none; color: white; font-size: 1.15rem; box-shadow: 0 10px 35px var(--accent-glow); padding: 16px; border-radius: 16px; font-weight: 800; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; animation: liquidGradient 3s linear infinite; }
+        .btn-fire:hover { transform: translateY(-5px) scale(1.01); box-shadow: 0 20px 45px var(--accent-glow); }
+        .btn-fire:active { transform: translateY(-1px) scale(0.96); }
+        @keyframes liquidGradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        /* Matrix Viewport Terminal Layout */
+        .output-viewport { background: var(--output-bg); border-radius: var(--radius-lg); padding: 28px; border: 1px solid var(--border-app); height: 520px; overflow: auto; direction: ltr; text-align: left; position: relative; box-shadow: inset 0 0 60px rgba(0,0,0,0.95); transition: all 0.4s ease; width: 100%; box-sizing: border-box; }
+        body.light-mode .output-viewport { box-shadow: inset 0 0 30px rgba(0,0,0,0.1); }
+        .output-viewport pre { margin: 0; color: #e2e8f0; font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace; font-size: var(--output-font-size); line-height: 1.05; white-space: pre; min-width: min-content; transition: filter 0.3s var(--elastic-curve); }
+        .output-viewport.color-mode pre { color: inherit; }
+        
+        /* Shimmer Loaders Overlays */
+        .viewport-loader { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(1, 1, 3, 0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; flex-direction: column; gap: 14px; z-index: 100; animation: fadeIn 0.3s ease; border-radius: var(--radius-lg); }
+        .viewport-loader i { font-size: 2.8rem; color: #ec4899; animation: spinMatrix 1s linear infinite, pulseGlow 1.5s ease-in-out infinite alternate; filter: drop-shadow(0 0 12px var(--accent-glow)); }
+        @keyframes spinMatrix { to { transform: rotate(360deg); } }
+        @keyframes pulseGlow { from { filter: drop-shadow(0 0 5px var(--accent-glow)); } to { filter: drop-shadow(0 0 20px var(--accent-glow)); } }
+
+        .empty-state { text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--text-secondary); width: 85%; direction: rtl; transition: all 0.3s; }
+        
+        .viewport-toolbar { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+        .v-btn { background: var(--liquid-glass); border: 1px solid var(--liquid-border); color: var(--text-primary); padding: 10px 16px; border-radius: 12px; cursor: pointer; font-size: 0.85rem; font-weight: 700; transition: all 0.3s var(--elastic-curve); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        .v-btn:hover { background: rgba(255,255,255,0.08); transform: translateY(-3px); box-shadow: 0 8px 18px rgba(0,0,0,0.25); border-color: rgba(255,255,255,0.3); }
+        .v-btn:active { transform: scale(0.93); }
+
+        /* Symmetric Smart Exporters Grid */
+        .smart-exports { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 16px; }
+        .smart-btn { background: var(--control-bg); border: 1px solid var(--border-app); color: var(--text-primary); padding: 14px 10px; border-radius: 14px; cursor: pointer; font-size: 0.85rem; font-weight: 700; transition: all 0.3s var(--elastic-curve); display: flex; flex-direction: column; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); position: relative; overflow: hidden; }
+        .smart-btn i { font-size: 1.25rem; transition: transform 0.4s var(--elastic-curve); }
+        .smart-btn:hover { background: rgba(255,255,255,0.06); transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.28); }
+        .smart-btn:hover i { transform: scale(1.2) rotate(8deg); }
+        .smart-btn:active { transform: translateY(-1px) scale(0.95); }
+        
+        .smart-btn::after { content: ''; position: absolute; top: -50%; left: -60%; width: 30%; height: 200%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent); transform: rotate(30deg); pointer-events: none; }
+        .smart-btn:hover::after { left: 140%; transition: all 0.65s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        .ai-suggest-btn { grid-column: 1 / -1; background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(5, 150, 105, 0.08)); border-color: #10b981; color: #10b981; flex-direction: row; justify-content: center; padding: 15px; gap: 8px; }
+        .ai-suggest-btn:hover { background: #10b981; color: #fff; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4); }
+        .ai-suggest-btn i { animation: pulseBrain 1.8s infinite alternate; }
+        @keyframes pulseBrain { from { transform: scale(1); } to { transform: scale(1.2); } }
+
+        @keyframes pulseGem { from { transform: scale(1) rotate(0deg); } to { transform: scale(1.1) rotate(6deg); } }
+
+        /* Footer System */
+        .studio-footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-app); font-size: 0.9rem; color: var(--text-secondary); font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; }
+        .studio-footer span { background: linear-gradient(135deg, #f59e0b, #ec4899, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: 0.5px; }
+
+        /* Custom Scrollbar Elements */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        ::-webkit-scrollbar-thumb { background: rgba(168, 85, 247, 0.3); border-radius: 10px; transition: all 0.3s; }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #a855f7, #ec4899); }
+
+        /* Responsive Mobile Elements Framework */
+        .mobile-nav-deck { display: none; position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: rgba(16, 10, 32, 0.85); border: 1px solid rgba(168, 85, 247, 0.3); padding: 6px; border-radius: 50px; z-index: 2000; box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(168, 85, 247, 0.2); gap: 6px; backdrop-filter: blur(30px) saturate(180%); -webkit-backdrop-filter: blur(30px) saturate(180%); transition: all 0.4s var(--elastic-curve); }
+        body.light-mode .mobile-nav-deck { background: rgba(255, 255, 255, 0.88); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12); border-color: rgba(0,0,0,0.1); }
+        .m-nav-btn { background: transparent; border: none; color: var(--text-secondary); padding: 12px 28px; border-radius: 40px; font-size: 0.85rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.3s var(--elastic-curve); flex-shrink: 0; }
+        .m-nav-btn.active { background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 100%); color: #fff; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.35); border: 1px solid rgba(255,255,255,0.2); transform: scale(1.04); }
+        body.light-mode .m-nav-btn.active { background: linear-gradient(135deg, rgba(15, 23, 42, 0.08) 0%, rgba(15, 23, 42, 0.02) 100%); color: #0f172a; border-color: rgba(0,0,0,0.12); box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08); }
+
+        @media (min-width: 1024px) {
+            .workspace { grid-template-columns: 530px 1fr; gap: 40px; align-items: start; }
+            .output-viewport { height: calc(100vh - 350px); min-height: 620px; }
+            .controls-column { 
+                position: sticky; 
+                top: 24px; 
+                max-height: calc(100vh - 100px); 
+                overflow-y: auto; 
+                overflow-x: hidden; 
+                padding-left: 14px; /* بهینه‌سازی لایه راست‌چین جهت عدم درگیری اسکرول‌بار با محتوا */
+                padding-bottom: 24px; /* جلوگیری از برش لبه پایینی */
+                scrollbar-width: thin; 
+                scrollbar-gutter: stable; 
+            }
+        }
+
+        @media (max-width: 1023px) {
+            body { padding: 12px; padding-bottom: 115px; }
+            .master-container { padding: 20px; border-radius: 24px; width: 100%; }
+            .mobile-nav-deck { display: flex; width: 92%; max-width: 380px; justify-content: space-between; }
+            .m-nav-btn { flex: 1; justify-content: center; padding: 12px 6px; }
+            .controls-column.mobile-hidden, .preview-column.mobile-hidden { display: none !important; }
+            .output-viewport { height: calc(100vh - 390px); padding: 18px; min-height: 380px; }
+            .studio-header { padding-bottom: 16px; margin-bottom: 20px; flex-direction: column; align-items: flex-start; gap: 16px; }
+            .nav-tools { width: 100%; justify-content: space-between; }
+            .tool-btn { flex: 1; padding: 12px; font-size: 0.9rem; }
+            .tool-btn span { display: none; }
+            .btn-fire { padding: 15px; font-size: 1rem; }
+            .matrix-inputs > div { min-width: calc(50% - 30px); }
+            .smart-exports { grid-template-columns: 1fr; }
+            .smart-btn { flex-direction: row; justify-content: center; padding: 13px; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<div class="master-container" id="appFrame">
+    <div class="studio-header">
+        <div class="brand">
+            <i class="fas fa-crown"></i>
+            <div class="brand-text">
+                <h1>DotArt Studio 🏴‍☠️</h1>
+                <div class="version-tag">Premium Kinetic Edition</div>
+            </div>
+        </div>
+        <div class="nav-tools">
+            <button class="tool-btn" id="webcamBtn" title="دوربین زنده"><i class="fas fa-video"></i><span>دوربین زنده</span></button>
+            <button class="tool-btn" id="sampleBtn" title="تصویر تست"><i class="fas fa-vial"></i><span>تصویر تست</span></button>
+            <button class="tool-btn" id="themeBtn" title="تغییر تم"><i class="fas fa-moon"></i></button>
+        </div>
+    </div>
+
+    <div class="workspace">
+        <div class="controls-column" id="controlsCol">
+            
+            <div class="studio-card">
+                <div class="card-main-title"><i class="fas fa-layer-group"></i> منبع و ابعاد ماتریکس</div>
+                
+                <div class="sub-panel">
+                    <div class="sub-panel-title"><i class="fas fa-upload"></i> بارگذاری تصویر</div>
+                    <div class="drop-deck" id="dropDeck">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <div style="font-size:0.9rem; font-weight:800;">فایل را بکشید یا اینجا کلیک کنید</div>
+                        <input type="file" id="imageLoader" accept="image/*" style="display:none;">
+                    </div>
+                    <div class="img-mini-dock" id="miniDock">
+                        <div class="scanner-line" id="aiScanner"></div>
+                        <div class="live-badge" id="liveBadge" style="display:none;">LIVE</div>
+                        <img id="sourceMiniImg" src="" alt="ورودی">
+                    </div>
+                </div>
+
+                <div class="sub-panel">
+                    <div class="sub-panel-title"><i class="fas fa-compress"></i> ابعاد شبکه (Resolution)</div>
+                    <div class="matrix-inputs">
+                        <div>
+                            <div style="font-size:0.75rem; margin-bottom:6px; opacity:0.7; font-weight:700;">عرض (X)</div>
+                            <input type="number" id="matrixW" min="10" max="800" value="120">
+                        </div>
+                        <div>
+                            <div style="font-size:0.75rem; margin-bottom:6px; opacity:0.7; font-weight:700;">ارتفاع (Y)</div>
+                            <input type="number" id="matrixH" min="10" max="800" value="60">
+                        </div>
+                        <button class="aspect-lock active" id="aspectToggle" title="قفل تناسب ابعاد"><i class="fas fa-link"></i></button>
+                    </div>
+                    <div class="preset-deck">
+                        <button class="preset-btn" data-w="40" data-h="40">تلگرام</button>
+                        <button class="preset-btn" data-w="100" data-h="100">اینستاگرام</button>
+                        <button class="preset-btn" data-w="60" data-h="60">واتساپ</button>
+                        <button class="preset-btn" data-w="30" data-h="20">چت مینیمال</button>
+                        <button class="preset-btn" data-w="80" data-h="80">توییتر (X)</button>
+                        <button class="preset-btn" data-w="50" data-h="50">دیسکورد</button>
+                        <button class="preset-btn" data-w="200" data-h="280">چاپ A4</button>
+                        <button class="preset-btn" data-w="200" data-h="100">فوق عریض</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="studio-card">
+                <div class="card-main-title"><i class="fas fa-sliders-h"></i> موتور رندر و فیلترهای پریمیوم</div>
+                
+                <div class="sub-panel">
+                    <div class="sub-panel-title"><i class="fas fa-sun"></i> نورپردازی و انحراف نوری</div>
+                    <div class="grid-sliders">
+                        <div class="slider-item">
+                            <label>روشنایی</label>
+                            <input type="range" id="f_bright" min="0" max="250" value="100">
+                            <span class="slider-counter" id="c_bright">100</span>
+                        </div>
+                        <div class="slider-item">
+                            <label>کنتراست</label>
+                            <input type="range" id="f_contrast" min="0" max="250" value="100">
+                            <span class="slider-counter" id="c_contrast">100</span>
+                        </div>
+                        <div class="slider-item">
+                            <label>اشباع رنگ</label>
+                            <input type="range" id="f_saturation" min="0" max="200" value="100">
+                            <span class="slider-counter" id="c_saturation">100</span>
+                        </div>
+                        <div class="slider-item">
+                            <label>گاما</label>
+                            <input type="range" id="f_gamma" min="0.2" max="3.0" step="0.1" value="1.0">
+                            <span class="slider-counter" id="c_gamma">1.0</span>
+                        </div>
+                        <div class="slider-item">
+                            <label>آستانه قطعیت</label>
+                            <input type="range" id="f_threshold" min="0" max="100" value="50">
+                            <span class="slider-counter" id="c_threshold">50</span>
+                        </div>
+                        <div class="slider-item">
+                            <label style="color:#f59e0b;"><i class="fas fa-glasses"></i> انحراف RGB</label>
+                            <input type="range" id="f_rgb_shift" min="0" max="10" value="0">
+                            <span class="slider-counter" id="c_rgb_shift" style="color:#f59e0b;">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sub-panel">
+                    <div class="sub-panel-title"><i class="fas fa-microchip"></i> فیلترها و دستیار هوشمند</div>
+                    <div class="toggles-container">
+                        <button type="button" class="ai-btn" id="aiConfigBtn" title="اسکن و تنظیم خودکار"><i class="fas fa-brain"></i> AI Auto Config</button>
+                        <label><input type="checkbox" id="c_invert"> وارونگی</label>
+                        <label><input type="checkbox" id="c_edge"> لبه‌یاب Sobel</label>
+                        <label><input type="checkbox" id="c_dither"> دیترینگ F-S</label>
+                        <label><input type="checkbox" id="c_sharpen"> شارپنس</label>
+                        <label><input type="checkbox" id="c_noise"> نویز فیلم</label>
+                        <label><input type="checkbox" id="c_crt"> مانیتور CRT</label>
+                    </div>
+                </div>
+
+                <div class="sub-panel">
+                    <div class="sub-panel-title"><i class="fas fa-palette"></i> پالت کاراکترها (Characters)</div>
+                    <div class="style-hub">
+                        <button class="hub-btn active" data-style="standard">کلاسیک</button>
+                        <button class="hub-btn" data-style="dense">متراکم لوکس</button>
+                        <button class="hub-btn" data-style="block">بلوکی</button>
+                        <button class="hub-btn" data-style="braille">بریل (Braille)</button>
+                        <button class="hub-btn" data-style="matrix">ماتریکس</button>
+                        <button class="hub-btn" data-style="dot">نقطه‌ای</button>
+                        <button class="hub-btn" data-style="emoji">ایموجی 🤩</button>
+                        <button class="hub-btn" data-style="color">رنگی (HTML)</button>
+                        <button class="hub-btn" data-style="custom" style="flex: 1 1 100%; background: rgba(236, 72, 153, 0.1); border-color: rgba(236, 72, 153, 0.4); color:#fbcfe8;"><i class="fas fa-pen-nib"></i> ساخت پالت سفارشی</button>
+                    </div>
+                    <input type="text" id="customCharsInput" value="THE SAZ 💎" placeholder="کاراکترهای خود را بنویسید (مثلاً: ░▒▓█)">
+                </div>
+            </div>
+
+            <div class="action-deck">
+                <button class="btn-fire" id="renderTrigger"><i class="fas fa-bolt"></i> پردازش و رندر آرت</button>
+            </div>
+        </div>
+
+        <div class="preview-column mobile-hidden" id="previewCol">
+            <div class="viewport-toolbar">
+                <button class="v-btn" id="zoomOut"><i class="fas fa-search-minus"></i></button>
+                <button class="v-btn" id="zoomIn"><i class="fas fa-search-plus"></i></button>
+                <button class="v-btn" id="zoomReset">سایز عادی</button>
+            </div>
+            
+            <div class="output-viewport" id="viewport">
+                <div class="viewport-loader" id="vLoader">
+                    <i class="fas fa-circle-notch"></i>
+                    <div style="font-weight: 800; font-size: 0.95rem; color:#f8fafc; margin-top:5px; letter-spacing:0.5px;">در حال رندر ماتریکس با تقارن مطلق...</div>
+                </div>
+                
+                <div class="empty-state" id="emptyNotice">
+                    <i class="fas fa-gem" style="font-size:3.5rem; margin-bottom:16px; color:#f59e0b; filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.5)); animation: pulseGem 2s ease-in-out infinite alternate;"></i><br>
+                    <span style="font-size:1.1rem; font-weight:800;">منتظر خلق یک شاهکار...</span><br>
+                    <span style="font-size:0.85rem; opacity:0.7;">تصویر آپلود کنید یا دوربین را روشن کنید.</span>
+                </div>
+                <pre id="canvasPre" style="display:none;"></pre>
+            </div>
+
+            <div class="smart-exports">
+                <button class="smart-btn" id="smartCopy"><i class="fas fa-copy"></i> کپی هوشمند</button>
+                <button class="smart-btn" id="smartTxt"><i class="fas fa-file-alt"></i> TXT هوشمند</button>
+                <button class="smart-btn" id="smartPng"><i class="fas fa-image"></i> PNG هوشمند</button>
+                <button class="smart-btn" id="smartHtml" style="border-color: rgba(168, 85, 247, 0.4);"><i class="fas fa-code"></i> HTML هوشمند</button>
+                <button class="smart-btn ai-suggest-btn" id="aiExportBtn"><i class="fas fa-magic"></i> خروجی پیشنهادی AI</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="studio-footer">
+        توسعه یافته توسط <span>👑 THE SAZ 💎</span>
+    </div>
+</div>
+
+<div class="mobile-nav-deck" id="mobileNav">
+    <button class="m-nav-btn active" id="mobTabControls"><i class="fas fa-sliders-h"></i> تنظیمات</button>
+    <button class="m-nav-btn" id="mobTabPreview"><i class="fas fa-expand"></i> خروجی آرت</button>
+</div>
+
+<script>
+    (function() {
+        const el = id => document.getElementById(id);
+
+        // 1. Interactive Fluid Particle Physics Engine with Radial Burst Motion
+        const bgCanvas = el('bgCanvas');
+        const bgCtx = bgCanvas.getContext('2d');
+        let dots = [];
+        let mouseX = null, mouseY = null;
+
+        function resizeBg() { 
+            try {
+                bgCanvas.width = window.innerWidth; 
+                bgCanvas.height = window.innerHeight; 
+                initDots(); 
+            } catch(e) { console.error(e); }
+        }
+        function initDots() {
+            dots = [];
+            let count = Math.min(130, Math.floor(bgCanvas.width * bgCanvas.height / 10500));
+            for(let i=0; i<count; i++) {
+                dots.push({ 
+                    x: Math.random()*bgCanvas.width, 
+                    y: Math.random()*bgCanvas.height, 
+                    r: Math.random()*3.5+0.5, 
+                    dx: (Math.random()-0.5)*0.8, 
+                    dy: (Math.random()-0.5)*0.8,
+                    color: Math.random() > 0.75 ? 'rgba(251, 191, 36, 0.35)' : 'rgba(168, 85, 247, 0.22)'
+                });
+            }
+        }
+        function drawBg() {
+            bgCtx.clearRect(0,0,bgCanvas.width,bgCanvas.height);
+            for(let i=dots.length-1; i>=0; i--) {
+                let d = dots[i];
+                d.x += d.dx; d.y += d.dy;
+                
+                if(d.isTemporary) {
+                    d.life -= 1.5;
+                    d.r *= 0.98;
+                    if(d.life <= 0) { dots.splice(i, 1); continue; }
+                } else {
+                    if(d.x<0||d.x>bgCanvas.width) d.dx *= -1; 
+                    if(d.y<0||d.y>bgCanvas.height) d.dy *= -1;
+                }
+                
+                if(mouseX !== null && mouseY !== null && !d.isTemporary) {
+                    let distX = d.x - mouseX; let distY = d.y - mouseY;
+                    let dist = Math.sqrt(distX*distX + distY*distY);
+                    if(dist < 130) {
+                        d.x += (distX / dist) * 1.8; d.y += (distY / dist) * 1.8;
+                    }
+                }
+
+                bgCtx.beginPath(); 
+                bgCtx.arc(d.x, d.y, d.r, 0, Math.PI*2); 
+                bgCtx.fillStyle = d.color;
+                bgCtx.fill();
+            }
+            requestAnimationFrame(drawBg);
+        }
+        window.addEventListener('resize', resizeBg);
+        window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+        window.addEventListener('mouseleave', () => { mouseX = null; mouseY = null; });
+        
+        // Dynamic Fluid Shockwave Burst on Screen Click
+        window.addEventListener('click', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.closest('.slider-item')) return;
+            for(let i=0; i<16; i++) {
+                let angle = Math.random() * Math.PI * 2;
+                let speed = Math.random() * 4 + 1.5;
+                dots.push({
+                    x: e.clientX,
+                    y: e.clientY,
+                    r: Math.random() * 3.5 + 1.5,
+                    dx: Math.cos(angle) * speed,
+                    dy: Math.sin(angle) * speed,
+                    color: Math.random() > 0.5 ? 'rgba(236, 72, 153, 0.65)' : 'rgba(168, 85, 247, 0.55)',
+                    isTemporary: true,
+                    life: 100
+                });
+            }
+        });
+
+        resizeBg(); drawBg();
+
+        // Tab Navigation Systems
+        el('mobTabControls').onclick = () => {
+            el('mobTabControls').classList.add('active'); el('mobTabPreview').classList.remove('active');
+            el('controlsCol').classList.remove('mobile-hidden'); el('previewCol').classList.add('mobile-hidden');
+            document.body.scrollIntoView({ behavior: 'smooth' });
+        };
+        el('mobTabPreview').onclick = () => {
+            el('mobTabPreview').classList.add('active'); el('mobTabControls').classList.remove('active');
+            el('previewCol').classList.remove('mobile-hidden'); el('controlsCol').classList.add('mobile-hidden');
+            document.body.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        // Application Core Data Structures
+        let currentImg = null;
+        let activeStyle = localStorage.getItem('dotart_style_premium') || 'standard';
+        let ratioLocked = true;
+        let imgAspectRatio = 1.0;
+        let fontScale = 10;
+        
+        // Memory Optimization Engine Canvas
+        const engineCanvas = document.createElement('canvas');
+        const engineCtx = engineCanvas.getContext('2d', { willReadFrequently: true });
+        
+        // Anti-Freeze & Memory Protection Variables
+        let isProcessing = false;
+        let renderQueued = false;
+        
+        let webcamStream = null;
+        let webcamInterval = null;
+        const hiddenVideo = document.createElement('video');
+        hiddenVideo.autoplay = true; hiddenVideo.playsInline = true;
+
+        // تغییر فاصله نشکن به فاصله استاندارد جهت همترازی میلی‌متری و ۱۰۰ درصدی در فونت‌های Monospace
+        const NBSP = ' '; 
+        const PALETTES = {
+            standard: ['@', '%', '#', '*', '+', '=', '-', ':', '.', NBSP],
+            dense: ['#', 'W', 'M', '$', 'O', 'X', 'C', '[', '(', '!', '+', '-', ';', ':', ',', '.', NBSP],
+            block: ['█', '▉', '▊', '▋', '▌', '▍', '▎', '▏', '░', NBSP],
+            dot: ['.', NBSP],
+            matrix: ['$', 'G', '8', '0', 'X', 'O', 't', 'i', '1', 'c', ';', ',', '.', NBSP],
+            emoji: ['🌑', '🌒', '🌓', '🌔', '🌕', '☀️'],
+            braille: []
+        };
+
+        try {
+            if(localStorage.getItem('dotart_w_premium')) {
+                el('matrixW').value = Math.min(600, Math.max(10, parseInt(localStorage.getItem('dotart_w_premium'))));
+                el('matrixH').value = Math.min(600, Math.max(10, parseInt(localStorage.getItem('dotart_h_premium') || 60)));
+                el('f_bright').value = localStorage.getItem('dotart_b_premium') || 100; el('c_bright').innerText = el('f_bright').value;
+                el('f_contrast').value = localStorage.getItem('dotart_c_premium') || 100; el('c_contrast').innerText = el('f_contrast').value;
+                el('f_rgb_shift').value = localStorage.getItem('dotart_rgb_premium') || 0; el('c_rgb_shift').innerText = el('f_rgb_shift').value;
+                el('f_saturation').value = localStorage.getItem('dotart_sat_premium') || 100; el('c_saturation').innerText = el('f_saturation').value;
+                
+                document.querySelectorAll('.hub-btn').forEach(b => {
+                    if(b.dataset.style === activeStyle) {
+                        document.querySelectorAll('.hub-btn').forEach(x=>x.classList.remove('active'));
+                        b.classList.add('active');
+                    }
+                });
+                if(activeStyle === 'custom') el('customCharsInput').style.display = 'block';
+            }
+        } catch(err) { console.warn(err); }
+
+        function saveState() {
+            try {
+                localStorage.setItem('dotart_style_premium', activeStyle);
+                localStorage.setItem('dotart_w_premium', el('matrixW').value);
+                localStorage.setItem('dotart_h_premium', el('matrixH').value);
+                localStorage.setItem('dotart_b_premium', el('f_bright').value);
+                localStorage.setItem('dotart_c_premium', el('f_contrast').value);
+                localStorage.setItem('dotart_sat_premium', el('f_saturation').value);
+                localStorage.setItem('dotart_rgb_premium', el('f_rgb_shift').value);
+            } catch(e) {}
+        }
+
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+            btn.onclick = () => {
+                let w = parseInt(btn.dataset.w); let h = parseInt(btn.dataset.h);
+                if (currentImg && ratioLocked) {
+                    el('matrixW').value = w; el('matrixH').value = Math.round(w / imgAspectRatio);
+                } else {
+                    el('matrixW').value = w; el('matrixH').value = h;
+                }
+                btn.style.transform = "scale(0.9)"; setTimeout(() => btn.style.transform = "", 140);
+                if(currentImg) processArtEngine();
+            };
+        });
+
+        // Robust Drag and Drop hijack prevention
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            window.addEventListener(eventName, e => e.preventDefault(), false);
+        });
+
+        const dropDeck = el('dropDeck');
+        dropDeck.onclick = () => el('imageLoader').click();
+        el('imageLoader').onchange = (e) => { if(e.target.files.length) { stopWebcam(); loadImgSrc(e.target.files[0]); } };
+        
+        dropDeck.addEventListener('dragover', (e) => { e.preventDefault(); e.stopPropagation(); dropDeck.style.borderColor = "var(--gold)"; });
+        dropDeck.addEventListener('dragleave', (e) => { e.preventDefault(); e.stopPropagation(); dropDeck.style.borderColor = ""; });
+        dropDeck.addEventListener('drop', (e) => { 
+            e.preventDefault(); e.stopPropagation(); dropDeck.style.borderColor = ""; 
+            if(e.dataTransfer.files.length) { stopWebcam(); loadImgSrc(e.dataTransfer.files[0]); } 
+        });
+
+        el('webcamBtn').onclick = async () => {
+            if(webcamStream) { stopWebcam(); } 
+            else {
+                try {
+                    webcamStream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } });
+                    hiddenVideo.srcObject = webcamStream;
+                    el('webcamBtn').classList.add('active-live');
+                    el('webcamBtn').innerHTML = '<i class="fas fa-video-slash"></i><span>قطع دوربین</span>';
+                    el('liveBadge').style.display = 'block'; el('miniDock').classList.add('active');
+                    
+                    const tempCanvas = document.createElement('canvas'); const tempCtx = tempCanvas.getContext('2d');
+                    tempCanvas.width = 160; tempCanvas.height = 120;
+
+                    webcamInterval = setInterval(() => {
+                        try {
+                            if(hiddenVideo.readyState === hiddenVideo.HAVE_CURRENT_DATA) {
+                                currentImg = hiddenVideo; imgAspectRatio = hiddenVideo.videoWidth / hiddenVideo.videoHeight;
+                                if(ratioLocked) {
+                                    let secureW = Math.min(600, Math.max(10, parseInt(el('matrixW').value) || 120));
+                                    el('matrixH').value = Math.round(secureW / imgAspectRatio);
+                                }
+                                tempCtx.drawImage(hiddenVideo, 0, 0, tempCanvas.width, tempCanvas.height);
+                                el('sourceMiniImg').src = tempCanvas.toDataURL('image/jpeg');
+                                processArtEngine();
+                            }
+                        } catch(loopErr) { console.error(loopErr); }
+                    }, 100);
+                } catch(err) { 
+                    alert('دسترسی به سخت‌افزار دوربین امکان‌پذیر نیست.'); stopWebcam();
+                }
+            }
+        };
+
+        function stopWebcam() {
+            try {
+                if(webcamStream) { webcamStream.getTracks().forEach(t => t.stop()); webcamStream = null; }
+                if(webcamInterval) clearInterval(webcamInterval);
+                el('webcamBtn').classList.remove('active-live');
+                el('webcamBtn').innerHTML = '<i class="fas fa-video"></i><span>دوربین زنده</span>';
+                el('liveBadge').style.display = 'none';
+            } catch(e) {}
+        }
+
+        el('sampleBtn').onclick = () => {
+            stopWebcam();
+            try {
+                const canvas = document.createElement('canvas'); canvas.width = 500; canvas.height = 500;
+                const ctx = canvas.getContext('2d');
+                let g = ctx.createLinearGradient(0,0,500,500);
+                g.addColorStop(0, '#02010c'); g.addColorStop(0.5, '#ec4899'); g.addColorStop(1, '#f59e0b');
+                ctx.fillStyle = g; ctx.fillRect(0,0,500,500);
+                ctx.fillStyle = '#fff'; ctx.font = 'bold 55px Vazirmatn, Arial'; ctx.textAlign = 'center'; 
+                ctx.fillText('Premium', 250, 240); ctx.font = '25px Vazirmatn'; ctx.fillText('Kinetic Art', 250, 290);
+                const img = new Image(); img.onload = () => setupImage(img); img.src = canvas.toDataURL();
+            } catch(e) {}
+        };
+
+        function loadImgSrc(file) {
+            try {
+                const r = new FileReader();
+                r.onload = (e) => { 
+                    const img = new Image(); img.onload = () => setupImage(img); img.src = e.target.result; 
+                };
+                r.readAsDataURL(file);
+            } catch(err) {}
+        }
+
+        function setupImage(img) {
+            currentImg = img; el('sourceMiniImg').src = img.src; el('miniDock').classList.add('active');
+            imgAspectRatio = img.width / img.height;
+            if(ratioLocked) {
+                let secureW = Math.min(600, Math.max(10, parseInt(el('matrixW').value) || 120));
+                el('matrixH').value = Math.round(secureW / imgAspectRatio);
+            }
+            processArtEngine();
+        }
+
+        // AI Calibration Unit
+        el('aiConfigBtn').onclick = () => {
+            if(!currentImg) { alert('ابتدا تصویری بارگذاری کنید.'); return; }
+            const scanner = el('aiScanner'); scanner.classList.add('scanner-active');
+            el('aiConfigBtn').style.opacity = "0.6";
+            
+            setTimeout(() => {
+                try {
+                    const c = document.createElement('canvas'); c.width = 64; c.height = 64;
+                    const cx = c.getContext('2d'); cx.drawImage(currentImg, 0, 0, 64, 64);
+                    const data = cx.getImageData(0,0,64,64).data;
+                    let lums = [];
+                    for(let i=0; i<data.length; i+=4) lums.push(0.299*data[i] + 0.587*data[i+1] + 0.114*data[i+2]);
+                    const avgLum = lums.reduce((a,b)=>a+b,0)/lums.length;
+                    let variance = 0; lums.forEach(l => variance += Math.pow(l-avgLum,2));
+                    const stdDev = Math.sqrt(variance/lums.length);
+                    
+                    let aiB=100, aiC=100, aiG=1.0, rgbS=0, aiSat=100;
+                    if (avgLum < 55) { aiB=140; aiG=1.25; } else if (avgLum > 175) { aiB=85; aiG=0.85; }
+                    if (stdDev < 35) aiC = 130; else if (stdDev > 75) aiC = 95;
+                    if (stdDev > 55) rgbS = 1; if (activeStyle === 'color') aiSat = 120;
+                    
+                    el('c_sharpen').checked = (stdDev < 42); el('c_dither').checked = (stdDev < 65 && activeStyle !== 'color');
+                    el('f_bright').value = aiB; el('c_bright').innerText = aiB;
+                    el('f_contrast').value = aiC; el('c_contrast').innerText = aiC;
+                    el('f_saturation').value = aiSat; el('c_saturation').innerText = aiSat;
+                    el('f_gamma').value = aiG; el('c_gamma').innerText = aiG;
+                    el('f_rgb_shift').value = rgbS; el('c_rgb_shift').innerText = rgbS;
+                    
+                    processArtEngine();
+                } catch(e) {}
+                scanner.classList.remove('scanner-active'); el('aiConfigBtn').style.opacity = "1";
+            }, 850);
+        };
+
+        // 6. Anti-Freeze Symmetrical Architecture Render Engine 
+        function processArtEngine() {
+            if(!currentImg) return;
+            
+            if(isProcessing) {
+                renderQueued = true;
+                return;
+            }
+            
+            isProcessing = true; 
+            el('vLoader').style.display = 'flex';
+
+            requestAnimationFrame(() => {
+                try {
+                    let w = Math.min(600, Math.max(10, parseInt(el('matrixW').value) || 100));
+                    let h = Math.min(600, Math.max(10, parseInt(el('matrixH').value) || 50));
+
+                    // Use pre-allocated engineCanvas for extreme optimization
+                    engineCanvas.width = w; engineCanvas.height = h;
+                    engineCtx.drawImage(currentImg, 0, 0, w, h);
+
+                    if(el('c_sharpen').checked) {
+                        let d = engineCtx.getImageData(0,0,w,h); let cp = new Uint8ClampedArray(d.data);
+                        let k = [0,-1,0,-1,5,-1,0,-1,0];
+                        for (let y=1; y<h-1; y++) {
+                            for (let x=1; x<w-1; x++) {
+                                let r=0,g=0,b=0;
+                                for(let ky=-1; ky<=1; ky++) {
+                                    for(let kx=-1; kx<=1; kx++) {
+                                        let idx = ((y+ky)*w+(x+kx))*4; let f = k[(ky+1)*3+(kx+1)];
+                                        r+=cp[idx]*f; g+=cp[idx+1]*f; b+=cp[idx+2]*f;
+                                    }
+                                }
+                                let i=(y*w+x)*4; d.data[i]=r; d.data[i+1]=g; d.data[i+2]=b;
+                            }
+                        }
+                        engineCtx.putImageData(d,0,0);
+                    }
+
+                    let imgData = engineCtx.getImageData(0,0,w,h); let pixelData = imgData.data;
+                    const bright = parseFloat(el('f_bright').value)/100;
+                    const contrast = parseFloat(el('f_contrast').value)/100;
+                    const saturation = parseFloat(el('f_saturation').value)/100;
+                    const gamma = parseFloat(el('f_gamma').value);
+                    const thresh = parseFloat(el('f_threshold').value)/100;
+                    const rgbShift = parseInt(el('f_rgb_shift').value) || 0;
+                    const inv = el('c_invert').checked; const edge = el('c_edge').checked;
+                    const dither = el('c_dither').checked; const noise = el('c_noise').checked;
+                    const isCRT = el('c_crt').checked;
+
+                    if (rgbShift > 0) {
+                        let temp = new Uint8ClampedArray(pixelData);
+                        for(let y=0; y<h; y++) {
+                            for(let x=0; x<w; x++) {
+                                let i = (y*w+x)*4;
+                                let idxR = (y*w + Math.max(0, x - rgbShift))*4;
+                                let idxB = (y*w + Math.min(w-1, x + rgbShift))*4;
+                                pixelData[i] = temp[idxR]; pixelData[i+2] = temp[idxB+2];
+                            }
+                        }
+                    }
+
+                    if(edge) {
+                        let grayArr = new Float32Array(w*h);
+                        for(let i=0; i<w*h; i++) grayArr[i] = (0.299*pixelData[i*4] + 0.587*pixelData[i*4+1] + 0.114*pixelData[i*4+2]);
+                        let gx = [-1,0,1,-2,0,2,-1,0,1], gy = [-1,-2,-1,0,0,0,1,2,1];
+                        for (let y=1; y<h-1; y++) {
+                            for (let x=1; x<w-1; x++) {
+                                let sx=0, sy=0;
+                                for(let ky=-1; ky<=1; ky++) {
+                                    for(let kx=-1; kx<=1; kx++) {
+                                        let v=grayArr[(y+ky)*w+(x+kx)]; let kIdx=(ky+1)*3+(kx+1); sx+=v*gx[kIdx]; sy+=v*gy[kIdx];
+                                    }
+                                }
+                                let m = Math.min(255, Math.sqrt(sx*sx+sy*sy));
+                                let idx=(y*w+x)*4; pixelData[idx]=pixelData[idx+1]=pixelData[idx+2]=m;
+                            }
+                        }
+                    }
+
+                    let matLight = new Float32Array(w*h);
+                    for(let y=0; y<h; y++) {
+                        for(let x=0; x<w; x++) {
+                            let i = y*w+x; let idx = i*4;
+                            let r = pixelData[idx], g = pixelData[idx+1], b = pixelData[idx+2];
+                            let gray = 0.299*r + 0.587*g + 0.114*b;
+                            r = gray + saturation * (r - gray); g = gray + saturation * (g - gray); b = gray + saturation * (b - gray);
+                            r = (r-127.5)*contrast+127.5; g = (g-127.5)*contrast+127.5; b = (b-127.5)*contrast+127.5;
+                            r *= bright; g *= bright; b *= bright;
+
+                            if(noise) { let n=(Math.random()-0.5)*35; r+=n; g+=n; b+=n; }
+                            if(isCRT && y%2===0) { r*=0.56; g*=0.56; b*=0.56; }
+                            if(inv) { r=255-r; g=255-g; b=255-b; }
+
+                            r = Math.min(255, Math.max(0, Math.pow(r/255, 1/gamma)*255));
+                            g = Math.min(255, Math.max(0, Math.pow(g/255, 1/gamma)*255));
+                            b = Math.min(255, Math.max(0, Math.pow(b/255, 1/gamma)*255));
+
+                            pixelData[idx]=r; pixelData[idx+1]=g; pixelData[idx+2]=b;
+                            let v = (0.299*r + 0.587*g + 0.114*b)/255;
+                            if(v < thresh - 0.25) v = 0; else if(v > thresh + 0.25) v = 1;
+                            matLight[i] = v;
+                        }
+                    }
+
+                    if(dither && !edge) {
+                        for(let y=0; y<h; y++) {
+                            for(let x=0; x<w; x++) {
+                                let i = y*w+x; let oldV = matLight[i]; let newV = oldV>0.5?1:0;
+                                let err = oldV - newV; matLight[i] = newV;
+                                if(x+1<w) matLight[i+1] += err*7/16;
+                                if(y+1<h) {
+                                    if(x>0) matLight[(y+1)*w+x-1] += err*3/16;
+                                    matLight[(y+1)*w+x] += err*5/16;
+                                    if(x+1<w) matLight[(y+1)*w+x+1] += err*1/16;
+                                }
+                            }
+                        }
+                    }
+
+                    let outPre = el('canvasPre');
+                    if(activeStyle === 'color') {
+                        let html = '';
+                        for(let y=0; y<h; y++) {
+                            let runColor = ''; let textSpan = '';
+                            for(let x=0; x<w; x++) {
+                                let idx = (y*w+x)*4;
+                                let r=Math.round(pixelData[idx]/8)*8, g=Math.round(pixelData[idx+1]/8)*8, b=Math.round(pixelData[idx+2]/8)*8;
+                                let cStr = `rgb(${r},${g},${b})`;
+                                
+                                let isBlack = (r < 10 && g < 10 && b < 10);
+                                let charPrint = '█'; // استفاده از بلوک پر حتی برای بخش‌های نامرئی تا عرض خطوط تغییر نکند
+                                let activeCstr = isBlack ? 'transparent' : cStr;
+
+                                if(activeCstr === runColor) { textSpan += charPrint; } 
+                                else {
+                                    if(textSpan) html += `<span style="color:${runColor}">${textSpan}</span>`;
+                                    runColor = activeCstr; textSpan = charPrint;
+                                }
+                            }
+                            if(textSpan) html += `<span style="color:${runColor}">${textSpan}</span>`;
+                            html += '\n';
+                        }
+                        outPre.innerHTML = html; el('viewport').classList.add('color-mode');
+                    } else if(activeStyle === 'braille') {
+                        let res = ''; const bw = Math.ceil(w/2), bh = Math.ceil(h/4);
+                        for(let by=0; by<bh; by++) {
+                            for(let bx=0; bx<bw; bx++) {
+                                let p = 0;
+                                for(let dy=0; dy<4; dy++) {
+                                    for(let dx=0; dx<2; dx++) {
+                                        let px = bx*2+dx, py = by*4+dy;
+                                        if(px<w && py<h && matLight[py*w+px]>0.45) {
+                                            let bit = (dx===0) ? (dy===3?6:dy) : (dy===3?7:dy+3); p |= (1<<bit);
+                                        }
+                                    }
+                                }
+                                res += String.fromCharCode(0x2800+p);
+                            }
+                            res += '\n';
+                        }
+                        outPre.textContent = res; el('viewport').classList.remove('color-mode');
+                    } else {
+                        let res = ''; let p = PALETTES[activeStyle];
+                        if(activeStyle === 'custom') {
+                            let cv = el('customCharsInput').value || NBSP; p = Array.from(cv);
+                            if(p.length === 0) p = [NBSP];
+                        }
+                        for(let y=0; y<h; y++) {
+                            for(let x=0; x<w; x++) {
+                                let v = matLight[y*w+x];
+                                let idx = Math.min(p.length-1, Math.max(0, Math.floor(v * p.length)));
+                                res += p[idx];
+                            }
+                            res += '\n';
+                        }
+                        outPre.textContent = res; el('viewport').classList.remove('color-mode');
+                    }
+
+                    outPre.style.display = 'block'; el('emptyNotice').style.display = 'none'; saveState();
+                } catch(renderErr) { console.error(renderErr); } 
+                finally { 
+                    el('vLoader').style.display = 'none'; 
+                    isProcessing = false; 
+                    
+                    if (renderQueued) {
+                        renderQueued = false;
+                        processArtEngine();
+                    }
+                }
+            });
+        }
+
+        // Action Events Listeners
+        el('renderTrigger').onclick = () => { 
+            if(currentImg) {
+                el('renderTrigger').style.transform = "scale(0.95)"; setTimeout(() => el('renderTrigger').style.transform = "", 180);
+                processArtEngine(); 
+            } else { alert('ابتدا تصویری انتخاب کنید.'); } 
+        };
+
+        document.querySelectorAll('.hub-btn').forEach(b => {
+            b.onclick = () => {
+                document.querySelectorAll('.hub-btn').forEach(x=>x.classList.remove('active'));
+                b.classList.add('active'); activeStyle = b.dataset.style; 
+                el('customCharsInput').style.display = (activeStyle === 'custom') ? 'block' : 'none';
+                processArtEngine();
+            };
+        });
+
+        el('customCharsInput').oninput = () => { if(activeStyle === 'custom') processArtEngine(); };
+        el('aspectToggle').onclick = () => { ratioLocked = !ratioLocked; el('aspectToggle').classList.toggle('active', ratioLocked); };
+        
+        el('matrixW').oninput = () => { if(currentImg && ratioLocked) el('matrixH').value = Math.round(Math.min(600, Math.max(10, parseInt(el('matrixW').value)||10)) / imgAspectRatio); };
+        el('matrixH').oninput = () => { if(currentImg && ratioLocked) el('matrixW').value = Math.round(Math.min(600, Math.max(10, parseInt(el('matrixH').value)||10)) * imgAspectRatio); };
+
+        ['f_bright','f_contrast','f_gamma','f_threshold','f_rgb_shift','f_saturation'].forEach(id => {
+            el(id).oninput = () => { el(id.replace('f_','c_')).innerText = el(id).value; if(webcamStream || currentImg) processArtEngine(); };
+        });
+        ['c_invert','c_edge','c_dither','c_sharpen','c_noise','c_crt'].forEach(id => {
+            el(id).onchange = () => { if(currentImg) processArtEngine(); };
+        });
+
+        el('zoomIn').onclick = () => { fontScale += 1; el('canvasPre').style.setProperty('--output-font-size', fontScale+'px'); };
+        el('zoomOut').onclick = () => { if(fontScale>4) fontScale -= 1; el('canvasPre').style.setProperty('--output-font-size', fontScale+'px'); };
+        el('zoomReset').onclick = () => { fontScale = 10; el('canvasPre').style.setProperty('--output-font-size', '10px'); };
+
+        // Ultimate Legacy Fallback for Mobile Webviews Copy Issue
+        function copyTextToClipboard(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(() => triggerCopySuccess(), () => fallbackCopyTextToClipboard(text));
+            } else {
+                fallbackCopyTextToClipboard(text);
+            }
+        }
+        function fallbackCopyTextToClipboard(text) {
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.top = "0"; textArea.style.left = "0"; textArea.style.position = "fixed";
+            document.body.appendChild(textArea);
+            textArea.focus(); textArea.select();
+            try { document.execCommand('copy'); triggerCopySuccess(); } catch (err) { alert("کپی ناموفق! لطفا متن را دستی انتخاب کنید."); }
+            document.body.removeChild(textArea);
+        }
+        function triggerCopySuccess() {
+            let orig = el('smartCopy').innerHTML; el('smartCopy').innerHTML = '<i class="fas fa-check"></i> کپی شد!';
+            setTimeout(() => el('smartCopy').innerHTML = orig, 1500);
+        }
+
+        el('smartCopy').onclick = () => {
+            if(!currentImg) return;
+            let data = (activeStyle === 'color') ? el('canvasPre').innerHTML : el('canvasPre').textContent;
+            copyTextToClipboard(data);
+        };
+
+        el('smartTxt').onclick = () => {
+            if(!currentImg) return;
+            try {
+                let text = el('canvasPre').textContent;
+                const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+                const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+                a.download = `DotArt_Symmetric_${Date.now()}.txt`; a.click();
+            } catch(e) {}
+        };
+
+        el('smartPng').onclick = () => {
+            if(!currentImg) return;
+            try {
+                const w = parseInt(el('matrixW').value), h = parseInt(el('matrixH').value);
+                const canvas = document.createElement('canvas'); const ctx = canvas.getContext('2d');
+                
+                const cellW = 10; const cellH = 16;
+                canvas.width = w * cellW + 60; canvas.height = h * cellH + 60;
+                
+                ctx.fillStyle = '#010103'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.font = 'bold 13px "Courier New", monospace';
+                ctx.textBaseline = 'top'; ctx.textAlign = 'left';
+
+                if(activeStyle === 'color') {
+                    let lines = el('canvasPre').innerHTML.split('\n');
+                    let tempDiv = document.createElement('div');
+                    
+                    for(let y=0; y<Math.min(h, lines.length); y++) {
+                        tempDiv.innerHTML = lines[y];
+                        let spans = tempDiv.childNodes;
+                        let xOff = 0;
+                        
+                        spans.forEach(node => {
+                            if(node.nodeType === Node.TEXT_NODE || node.nodeType === Node.ELEMENT_NODE) {
+                                let txt = node.textContent || "";
+                                let cColor = (node.style && node.style.color) ? node.style.color : '#ffffff';
+                                
+                                ctx.fillStyle = cColor === 'transparent' ? '#010103' : cColor;
+                                for(let i=0; i<txt.length; i++) {
+                                    ctx.fillText('█', 30 + xOff * cellW, 30 + y * cellH);
+                                    xOff++;
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    const lines = el('canvasPre').textContent.split('\n');
+                    ctx.fillStyle = '#ffffff';
+                    for(let y=0; y<Math.min(h, lines.length); y++) {
+                        const chars = Array.from(lines[y]);
+                        for(let x=0; x<Math.min(w, chars.length); x++) {
+                            ctx.fillText(chars[x], 30 + x * cellW, 30 + y * cellH);
+                        }
+                    }
+                }
+                const a = document.createElement('a'); a.download = `DotArt_Perfect_Symmetry_${Date.now()}.png`;
+                a.href = canvas.toDataURL(); a.click();
+            } catch(pngErr) { alert("خطا در سیستم رسترایز تصویر متقارن. شاید ابعاد تصویر خیلی بزرگ باشد."); }
+        };
+
+        el('smartHtml').onclick = () => {
+            if(!currentImg) return;
+            try {
+                let artContent = el('canvasPre').innerHTML;
+                let isColor = el('viewport').classList.contains('color-mode');
+                
+                let standaloneHtml = `<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DotArt Studio - Premium Standalone Matrix Export 🏴‍☠️</title>
+    <style>
+        body { 
+            background-color: #03010e; 
+            color: #f8fafc; 
+            display: flex; 
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 40px 20px; 
+            box-sizing: border-box; 
+            font-family: system-ui, -apple-system, sans-serif; 
+        }
+        .export-container { 
+            background: rgba(18, 10, 32, 0.85); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            border-radius: 28px; 
+            padding: 32px; 
+            box-shadow: 0 40px 80px -15px rgba(0,0,0,0.95), 0 0 100px -20px rgba(168, 85, 247, 0.35); 
+            max-width: 100%; 
+            overflow: hidden; 
+            animation: htmlIntro 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes htmlIntro { from { opacity: 0; transform: scale(0.96) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        pre { 
+            margin: 0; 
+            font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace; 
+            font-size: 10px; 
+            line-height: 1.05; 
+            white-space: pre; 
+            background: #010103; 
+            padding: 24px; 
+            border-radius: 18px; 
+            direction: ltr; 
+            text-align: left; 
+            overflow: auto; 
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.98); 
+            ${isColor ? '' : 'color: #e2e8f0;'} 
+        }
+        .export-footer {
+            margin-top: 35px;
+            font-size: 1rem;
+            color: #a855f7;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-align: center;
+            animation: waveMotion 2.5s ease-in-out infinite alternate;
+            text-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+        }
+        @keyframes waveMotion { from { opacity: 0.75; transform: translateY(0); } to { opacity: 1; transform: translateY(-4px); } }
+    </style>
+</head>
+<body>
+    <div class="export-container">
+        <pre>${artContent}</pre>
+    </div>
+    <div class="export-footer">Exporting by THE SAZ 💜</div>
+</body>
+</html>`;
+
+                const blob = new Blob([standaloneHtml], { type: 'text/html;charset=utf-8' });
+                const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+                a.download = `DotArt_ColorMatrix_${Date.now()}.html`; a.click();
+            } catch(htmlErr) { console.error(htmlErr); }
+        };
+
+        el('aiExportBtn').onclick = () => {
+            if(!currentImg) { alert('لطفاً ابتدا تصویری آپلود کنید.'); return; }
+            let w = parseInt(el('matrixW').value) || 120; let h = parseInt(el('matrixH').value) || 60;
+            let orig = el('aiExportBtn').innerHTML;
+            if ((w * h) > 12000) {
+                el('aiExportBtn').innerHTML = '<i class="fas fa-magic"></i> AI: پیشنهاد سند متنی (TXT)';
+                setTimeout(() => el('aiExportBtn').innerHTML = orig, 2000); el('smartTxt').click();
+            } else if (activeStyle === 'color') {
+                el('aiExportBtn').innerHTML = '<i class="fas fa-magic"></i> AI: پیشنهاد سند مستقل (HTML)';
+                setTimeout(() => el('aiExportBtn').innerHTML = orig, 2000); el('smartHtml').click();
+            } else {
+                el('aiExportBtn').innerHTML = '<i class="fas fa-magic"></i> AI: پیشنهاد پوستر گرافیکی (PNG)';
+                setTimeout(() => el('aiExportBtn').innerHTML = orig, 2000); el('smartPng').click();
+            }
+        };
+
+    })();
+</script>
+</body>
+</html>
