@@ -2,10 +2,10 @@
 
 <div align="center">
 
-![GitHub repo size](https://img.shields.io/github/repo-size/YOUR_USERNAME/dotart-studio?style=for-the-badge&color=purple)
-![GitHub license](https://img.shields.io/github/license/YOUR_USERNAME/dotart-studio?style=for-the-badge&color=pink)
-![GitHub stars](https://img.shields.io/github/stars/YOUR_USERNAME/dotart-studio?style=for-the-badge&color=gold)
-![GitHub forks](https://img.shields.io/github/forks/YOUR_USERNAME/dotart-studio?style=for-the-badge&color=cyan)
+![GitHub repo size](https://img.shields.io/github/repo-size/its-thesaz/dotart-studio?style=for-the-badge&color=purple)
+![GitHub license](https://img.shields.io/github/license/its-thesaz/dotart-studio?style=for-the-badge&color=pink)
+![GitHub stars](https://img.shields.io/github/stars/its-thesaz/dotart-studio?style=for-the-badge&color=gold)
+![GitHub forks](https://img.shields.io/github/forks/its-thesaz/dotart-studio?style=for-the-badge&color=cyan)
 
 <h3>یک استودیوی پیشرفته و مدرن تحت وب برای تبدیل تصاویر و استریم زنده وب‌کم به ماتریکس‌های متنی و نقطه-آرت (Dot Art)</h3>
 
