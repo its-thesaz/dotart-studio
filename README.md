@@ -9,7 +9,7 @@
 
 <h3>یک استودیوی پیشرفته و مدرن تحت وب برای تبدیل تصاویر و استریم زنده وب‌کم به ماتریکس‌های متنی و نقطه-آرت (Dot Art)</h3>
 
-[🌐 مشاهده نسخه زنده سایت (Demo)](https://YOUR_USERNAME.github.io/dotart-studio/)
+[🌐 مشاهده نسخه زنده سایت (Demo)](https://its-thesaz.github.io/dotart-studio/)
 
 </div>
 
